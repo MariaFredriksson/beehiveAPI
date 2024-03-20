@@ -8,12 +8,13 @@
 import express from 'express'
 import logger from 'morgan'
 import { router } from './routes/router.js'
-import { connectDB } from './config/mongoose.js'
+// import { connectDB } from './config/mongoose.js'
 import helmet from 'helmet'
 
 try {
   // Connect to MongoDB.
-  await connectDB()
+  // & Comment back this later!
+  // await connectDB()
 
   // Creates an Express application.
   const expressApp = express()

@@ -2,7 +2,6 @@
  * Module for the TasksController.
  *
  * @author Maria Fredriksson
- * @author Mats Loock
  * @version 2.0.0
  */
 
@@ -75,7 +74,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a GET to http://localhost:5080/api/v1/images
+  // * This is called by doing a GET to http://localhost:5030/api/v1/images
   async getAll (req, res, next) {
     try {
       // Get all images from the database
@@ -96,7 +95,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a GET to http://localhost:5080/api/v1/images/:id
+  // * This is called by doing a GET to http://localhost:5030/api/v1/images/:id
   async getOne (req, res, next) {
     try {
       const idToGet = req.params.id
@@ -119,7 +118,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a POST to http://localhost:5080/api/v1/images
+  // * This is called by doing a POST to http://localhost:5030/api/v1/images
   async create (req, res, next) {
     let newImage = {}
     try {
@@ -160,7 +159,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a PATCH to http://localhost:5080/api/v1/images/:id
+  // * This is called by doing a PATCH to http://localhost:5030/api/v1/images/:id
   async updatePartially (req, res, next) {
     try {
       const id = req.params.id
@@ -191,7 +190,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a PUT to http://localhost:5080/api/v1/images/:id
+  // * This is called by doing a PUT to http://localhost:5030/api/v1/images/:id
   async updateWhole (req, res, next) {
     try {
       const id = req.params.id
@@ -218,7 +217,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a DELETE to http://localhost:5080/api/v1/images/:id
+  // * This is called by doing a DELETE to http://localhost:5030/api/v1/images/:id
   async delete (req, res, next) {
     try {
       const idToDelete = req.params.id
