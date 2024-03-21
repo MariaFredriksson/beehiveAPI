@@ -74,15 +74,15 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a GET to http://localhost:5030/api/v1/images
+  // * This is called by doing a GET to http://localhost:5030/api/v1/hives
   async getAll (req, res, next) {
     try {
-      // Get all images from the database
-      const images = await Resource.find()
+      // Get all hives from the database
+      const hives = await Resource.find()
 
       // Send the response to the client
       // No need to send the status code here, since it is automatically set to 200
-      res.json(images)
+      res.json(hives)
     } catch (error) {
       next(error)
     }
@@ -95,7 +95,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a GET to http://localhost:5030/api/v1/images/:id
+  // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id
   async getOne (req, res, next) {
     try {
       const idToGet = req.params.id
@@ -118,11 +118,11 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a POST to http://localhost:5030/api/v1/images
+  // * This is called by doing a POST to http://localhost:5030/api/v1/hives
   async create (req, res, next) {
     let newImage = {}
     try {
-      const newImageJson = await this.#fetchPostPutPatchDel('https://courselab.lnu.se/picture-it/images/api/v1/images', req.body, 'POST', 'application/json')
+      const newImageJson = await this.#fetchPostPutPatchDel('https://courselab.lnu.se/picture-it/images/api/v1/hives', req.body, 'POST', 'application/json')
       newImage = await newImageJson.json()
       // If data and contentType is not included in the request body, or isn't correct, the image service will return an error.
       // These are the same things that are required in the database (plus the imageUrl returned from the image service) so if the req.body is good enough for the image service, it is good enough for the database.
@@ -143,7 +143,7 @@ export class ResourcesController {
     } catch (error) {
       // If an error occurs, it might be because the image could not be saved in the database, so then try to delete it from the image api
       try {
-        await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/images/${newImage.id}`, req.body, 'DELETE', '*/*')
+        await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/hives/${newImage.id}`, req.body, 'DELETE', '*/*')
       } catch (error) {
         // If an error occurs here, just ignore it
       }
@@ -159,7 +159,7 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a PATCH to http://localhost:5030/api/v1/images/:id
+  // * This is called by doing a PATCH to http://localhost:5030/api/v1/hives/:id
   async updatePartially (req, res, next) {
     try {
       const id = req.params.id
@@ -167,7 +167,7 @@ export class ResourcesController {
       // Only fetch the image API if there is new information that the image service is interested in
       if (req.body.data || req.body.contentType) {
         // Do a fetch PATCH to the image api
-        await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/images/${id}`, req.body, 'PATCH', '*/*')
+        await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/hives/${id}`, req.body, 'PATCH', '*/*')
         // If data or contentType isn't correct, the image service will return an error.
         // These are the same things that are required in the database (plus the imageUrl returned from the image service) so if the req.body is good enough for the image service, it is good enough for the database.
       }
@@ -190,12 +190,12 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a PUT to http://localhost:5030/api/v1/images/:id
+  // * This is called by doing a PUT to http://localhost:5030/api/v1/hives/:id
   async updateWhole (req, res, next) {
     try {
       const id = req.params.id
 
-      await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/images/${id}`, req.body, 'PUT', '*/*')
+      await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/hives/${id}`, req.body, 'PUT', '*/*')
       // If data and contentType is not included in the request body, or isn't correct, the image service will return an error.
       // These are the same things that are required in the database, so if the req.body is good enough for the image service, it is good enough for the database.
 
@@ -217,14 +217,14 @@ export class ResourcesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  // * This is called by doing a DELETE to http://localhost:5030/api/v1/images/:id
+  // * This is called by doing a DELETE to http://localhost:5030/api/v1/hives/:id
   async delete (req, res, next) {
     try {
       const idToDelete = req.params.id
 
       // Do a fetch DELETE to the image api
       // Just send an empty object as the request body since null doesn't work
-      await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/images/${idToDelete}`, {}, 'DELETE', '*/*')
+      await this.#fetchPostPutPatchDel(`https://courselab.lnu.se/picture-it/images/api/v1/hives/${idToDelete}`, {}, 'DELETE', '*/*')
 
       // Delete the resource in the database
       await Resource.deleteOne({ id: idToDelete })

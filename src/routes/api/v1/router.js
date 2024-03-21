@@ -11,4 +11,4 @@ import { router as resourcesRouter } from './resources-router.js'
 export const router = express.Router()
 
 router.get('/', (req, res) => res.json({ message: 'Hooray! Welcome to the Beehive Monitoring API!' }))
-router.use('/images', resourcesRouter)
+router.use('/hives', resourcesRouter)
