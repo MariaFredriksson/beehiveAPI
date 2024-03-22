@@ -1,9 +1,5 @@
 /**
- * Mongoose model for Beehive Metrics.
- *
- * This model is designed to store various types of data collected from beehives,
- * such as flow rates, humidity levels, temperature readings, and hive weights.
- * Each record is timestamped and associated with a specific location or hive identifier.
+ * Mongoose model for Beehive Flow.
  *
  * @author Maria Fredriksson
  * @version 1.0.0
@@ -12,7 +8,7 @@
 import mongoose from 'mongoose'
 
 // Create a schema.
-const beehiveMetricsSchema = new mongoose.Schema({
+const beehiveFlowSchema = new mongoose.Schema({
   hiveId: {
     type: Number,
     required: true
@@ -23,25 +19,7 @@ const beehiveMetricsSchema = new mongoose.Schema({
   },
   flow: {
     type: Number,
-    required: false // Assuming not all records will have every metric
-  },
-  humidity: {
-    type: Number,
-    required: false,
-    min: 0,
-    max: 100 // Humidity percentage
-  },
-  temperature: {
-    type: Number,
-    required: false
-  },
-  weight: {
-    type: Number,
-    required: false
-  },
-  location: {
-    type: String,
-    required: false
+    required: true
   }
 }, {
   timestamps: true, // Automatically adds createdAt and updatedAt timestamps
@@ -62,4 +40,4 @@ const beehiveMetricsSchema = new mongoose.Schema({
 })
 
 // Create a model using the schema.
-export const BeehiveMetrics = mongoose.model('BeehiveMetrics', beehiveMetricsSchema)
+export const BeehiveFlow = mongoose.model('BeehiveFlow', beehiveFlowSchema)
