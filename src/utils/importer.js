@@ -47,6 +47,7 @@ const insertBatch = async (batch, Model) => {
       console.log(`Inserted batch of ${batch.length} records.`)
     } catch (err) {
       console.error('Error inserting batch. Skipping batch.')
+      console.error(err.message)
 
       // ^^ Is there any way that I can go through the batch and insert the records that are valid, and skip the invalid ones?
       // throw new Error(err)
@@ -144,7 +145,7 @@ await connectDB()
 
 // & Upload data from all the files, or comment out the ones you don't want to upload
 // importDataFromCSV('./../beehive_data/flow_2017.csv', 0, 'flow')
-// importDataFromCSV('./../beehive_data/flow_schwartau.csv', 1, 'flow')
+importDataFromCSV('./../beehive_data/flow_schwartau.csv', 1, 'flow')
 // importDataFromCSV('./../beehive_data/flow_wurzburg.csv', 2, 'flow')
 // importDataFromCSV('./../beehive_data/humidity_2017.csv', 0, 'humidity')
 // importDataFromCSV('./../beehive_data/humidity_schwartau.csv', 1, 'humidity')
