@@ -24,3 +24,9 @@ router.get('/:id/flow', (req, res, next) => controller.getRecentFlow(req, res, n
 
 // GET hives/:id/humidity
 router.get('/:id/humidity', (req, res, next) => controller.getRecentHumidity(req, res, next))
+
+// GET hives/:id/temperature
+router.get('/:id/temperature', (req, res, next) => controller.getRecentTemperature(req, res, next))
+
+// GET hives/:id/weight
+router.get('/:id/weight', (req, res, next) => controller.getRecentWeight(req, res, next))

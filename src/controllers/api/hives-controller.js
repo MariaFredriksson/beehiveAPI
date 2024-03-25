@@ -203,6 +203,44 @@ export class HivesController {
     }
   }
 
+  async getRecentTemperature (req, res, next) {
+    try {
+      const idToGet = req.params.id
+
+      const temperatureObject = await this.#getMostRecent(idToGet, BeehiveTemperature)
+
+      // Create a new object and only add the values that are needed
+      const temperatureResponse = {
+        hiveId: temperatureObject.hiveId,
+        date: temperatureObject.date,
+        temperature: temperatureObject.temperature
+      }
+
+      res.json(temperatureResponse)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getRecentWeight (req, res, next) {
+    try {
+      const idToGet = req.params.id
+
+      const weightObject = await this.#getMostRecent(idToGet, BeehiveWeight)
+
+      // Create a new object and only add the values that are needed
+      const weightResponse = {
+        hiveId: weightObject.hiveId,
+        date: weightObject.date,
+        weight: weightObject.weight
+      }
+
+      res.json(weightResponse)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   /**
    * Creates a new resource and saves it in the database.
    *
