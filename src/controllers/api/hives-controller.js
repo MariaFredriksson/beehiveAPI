@@ -1,8 +1,8 @@
 /**
- * Module for the TasksController.
+ * Module for the HivesController.
  *
  * @author Maria Fredriksson
- * @version 2.0.0
+ * @version 1.0.0
  */
 
 import { Resource } from '../../models/resource.js'
