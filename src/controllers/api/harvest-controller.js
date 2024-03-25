@@ -19,6 +19,7 @@ export class HarvestController {
    * @param {Function} next - Express next middleware function.
    * @returns {Promise<void>} - A promise that resolves when the operation is complete.
    */
+  // * This is called by doing a POST to http://localhost:5030/api/v1/harvest
   async addHarvest (req, res, next) {
     try {
       // Extract information from the request body
@@ -26,6 +27,7 @@ export class HarvestController {
 
       // Validate the data as needed (e.g., check for missing fields)
       // This is a simple example. Consider more thorough validation for production.
+      // ^^ Change this validation maybe...?
       if (!hiveId || !date || !amount || !userId) {
         // ^^ Do I really need ta have a return here...?
         return res.status(400).json({ message: 'Missing required fields' })
