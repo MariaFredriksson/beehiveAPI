@@ -157,6 +157,7 @@ export class HivesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
+  // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/flow
   async getRecentFlow (req, res, next) {
     try {
       const id = req.params.id
@@ -183,6 +184,7 @@ export class HivesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
+  // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/humidity
   async getRecentHumidity (req, res, next) {
     try {
       const id = req.params.id
@@ -209,6 +211,7 @@ export class HivesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
+  // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/temperature
   async getRecentTemperature (req, res, next) {
     try {
       const id = req.params.id
@@ -235,6 +238,7 @@ export class HivesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
+  // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/weight
   async getRecentWeight (req, res, next) {
     try {
       const id = req.params.id
