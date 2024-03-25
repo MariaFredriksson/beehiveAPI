@@ -71,8 +71,15 @@ export class HivesController {
     }
   }
 
-  #getMostRecent = async (idToGet, model) => {
-    return await model.findOne({ hiveId: idToGet }).sort({ date: -1 })
+  /**
+   * Fetches the most recent object from the specified model.
+   *
+   * @param {string} id - The id of the hive to get the information about.
+   * @param {object} model - The model to get the resource from.
+   * @returns {object} - The most recent object from the specified model.
+   */
+  #getMostRecent = async (id, model) => {
+    return await model.findOne({ hiveId: id }).sort({ date: -1 })
   }
 
   /**
@@ -97,7 +104,7 @@ export class HivesController {
   }
 
   /**
-   * Sends a JSON response containing one resource.
+   * Sends a JSON response containing the most recent flow, humidity, temperature and weight objects of a hive.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -106,18 +113,18 @@ export class HivesController {
   // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id
   async getHiveStatus (req, res, next) {
     try {
-      const idToGet = req.params.id
+      const id = req.params.id
 
-      const flowObject = await this.#getMostRecent(idToGet, BeehiveFlow)
+      const flowObject = await this.#getMostRecent(id, BeehiveFlow)
 
-      const humidityObject = await this.#getMostRecent(idToGet, BeehiveHumidity)
+      const humidityObject = await this.#getMostRecent(id, BeehiveHumidity)
 
-      const temperatureObject = await this.#getMostRecent(idToGet, BeehiveTemperature)
+      const temperatureObject = await this.#getMostRecent(id, BeehiveTemperature)
 
-      const weightObject = await this.#getMostRecent(idToGet, BeehiveWeight)
+      const weightObject = await this.#getMostRecent(id, BeehiveWeight)
 
       // Initialize the hiveResponse object with the hiveId
-      const hiveResponse = { hiveId: idToGet }
+      const hiveResponse = { hiveId: id }
 
       // Only add the properties to hiveResponse if the relevant object is not null
       if (flowObject) hiveResponse.flow = flowObject.flow
@@ -143,11 +150,18 @@ export class HivesController {
     }
   }
 
+  /**
+   * Sends a JSON response containing the most recent flow object.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async getRecentFlow (req, res, next) {
     try {
-      const idToGet = req.params.id
+      const id = req.params.id
 
-      const flowObject = await this.#getMostRecent(idToGet, BeehiveFlow)
+      const flowObject = await this.#getMostRecent(id, BeehiveFlow)
 
       // Create a new object and only add the values that are needed
       const flowResponse = {
@@ -162,11 +176,18 @@ export class HivesController {
     }
   }
 
+  /**
+   * Sends a JSON response containing the most recent humidity object.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async getRecentHumidity (req, res, next) {
     try {
-      const idToGet = req.params.id
+      const id = req.params.id
 
-      const humidityObject = await this.#getMostRecent(idToGet, BeehiveHumidity)
+      const humidityObject = await this.#getMostRecent(id, BeehiveHumidity)
 
       // Create a new object and only add the values that are needed
       const humidityResponse = {
@@ -181,11 +202,18 @@ export class HivesController {
     }
   }
 
+  /**
+   * Sends a JSON response containing the most recent temperature object.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async getRecentTemperature (req, res, next) {
     try {
-      const idToGet = req.params.id
+      const id = req.params.id
 
-      const temperatureObject = await this.#getMostRecent(idToGet, BeehiveTemperature)
+      const temperatureObject = await this.#getMostRecent(id, BeehiveTemperature)
 
       // Create a new object and only add the values that are needed
       const temperatureResponse = {
@@ -200,11 +228,18 @@ export class HivesController {
     }
   }
 
+  /**
+   * Sends a JSON response containing the most recent weight object.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async getRecentWeight (req, res, next) {
     try {
-      const idToGet = req.params.id
+      const id = req.params.id
 
-      const weightObject = await this.#getMostRecent(idToGet, BeehiveWeight)
+      const weightObject = await this.#getMostRecent(id, BeehiveWeight)
 
       // Create a new object and only add the values that are needed
       const weightResponse = {
