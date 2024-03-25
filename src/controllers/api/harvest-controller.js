@@ -28,7 +28,7 @@ export class HarvestController {
       // Validate the data as needed (e.g., check for missing fields)
       // This is a simple example. Consider more thorough validation for production.
       // ^^ Change this validation maybe...?
-      if (!hiveId || !date || !amount || !userId) {
+      if ((!hiveId && hiveId !== 0) || !date || !amount || !userId) {
         // ^^ Do I really need ta have a return here...?
         return res.status(400).json({ message: 'Missing required fields' })
       }
