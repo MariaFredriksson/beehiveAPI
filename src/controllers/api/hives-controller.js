@@ -5,7 +5,7 @@
  * @version 2.0.0
  */
 
-// import { Resource } from '../../models/resource.js'
+import { Resource } from '../../models/resource.js'
 import { BeehiveFlow } from './../../models/beehiveFlow.js'
 import { BeehiveHumidity } from './../../models/beehiveHumidity.js'
 import { BeehiveTemperature } from './../../models/beehiveTemperature.js'
@@ -106,9 +106,6 @@ export class HivesController {
   // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id
   async getHiveStatus (req, res, next) {
     try {
-      // ^^ Just send some test response for now
-      // res.status(200).json({ message: 'This is a test response' })
-
       const idToGet = req.params.id
 
       const flowObject = await this.#getMostRecent(idToGet, BeehiveFlow)
@@ -137,25 +134,6 @@ export class HivesController {
       //   temperature: temperatureObject.temperature,
       //   weight: weightObject.weight
       // }
-
-      // const weightObject = await BeehiveWeight.findOne({ hiveId: idToGet })
-      //   .sort({ date: -1 }) // Sorts by date in descending order, so the most recent date comes first
-      // .exec() // Executes the query
-
-      // const flowObject = await BeehiveFlow.findOne({ hiveId: idToGet })
-      //   .sort({ date: -1 })
-
-      // const humidityObject = await BeehiveHumidity.findOne({ hiveId: idToGet })
-      //   .sort({ date: -1 })
-
-      // const temperatureObject = await BeehiveTemperature.findOne({ hiveId: idToGet })
-      //   .sort({ date: -1 })
-
-      // Get the latest weight from the database for the hive
-      // const weight = await BeehiveWeight.findOne({ hiveId: idToGet }).sort({ timestamp: -1 })
-
-      // Get the image from the database
-      // const image = await Resource.findOne({ id: idToGet })
 
       // Send the response to the client
       // No need to send the status code here, since it is automatically set to 200
