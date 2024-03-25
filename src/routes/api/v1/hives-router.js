@@ -18,3 +18,9 @@ const controller = new HivesController()
 
 // GET hives/:id
 router.get('/:id', (req, res, next) => controller.getHiveStatus(req, res, next))
+
+// GET hives/:id/flow
+router.get('/:id/flow', (req, res, next) => controller.getRecentFlow(req, res, next))
+
+// GET hives/:id/humidity
+router.get('/:id/humidity', (req, res, next) => controller.getRecentHumidity(req, res, next))

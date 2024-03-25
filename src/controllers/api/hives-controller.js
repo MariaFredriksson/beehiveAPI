@@ -71,6 +71,10 @@ export class HivesController {
     }
   }
 
+  #getMostRecent = async (idToGet, model) => {
+    return await model.findOne({ hiveId: idToGet }).sort({ date: -1 })
+  }
+
   /**
    * Sends a JSON response containing all resources.
    *
@@ -103,9 +107,49 @@ export class HivesController {
   async getHiveStatus (req, res, next) {
     try {
       // ^^ Just send some test response for now
-      res.status(200).json({ message: 'This is a test response' })
+      // res.status(200).json({ message: 'This is a test response' })
 
-      // const idToGet = req.params.id
+      const idToGet = req.params.id
+
+      const flowObject = await this.#getMostRecent(idToGet, BeehiveFlow)
+
+      const humidityObject = await this.#getMostRecent(idToGet, BeehiveHumidity)
+
+      const temperatureObject = await this.#getMostRecent(idToGet, BeehiveTemperature)
+
+      const weightObject = await this.#getMostRecent(idToGet, BeehiveWeight)
+
+      // Initialize the hiveResponse object with the hiveId
+      const hiveResponse = { hiveId: idToGet }
+
+      // Only add the properties to hiveResponse if the relevant object is not null
+      if (flowObject) hiveResponse.flow = flowObject.flow
+      if (humidityObject) hiveResponse.humidity = humidityObject.humidity
+      if (temperatureObject) hiveResponse.temperature = temperatureObject.temperature
+      if (weightObject) hiveResponse.weight = weightObject.weight
+
+      // ^^ Maybe change to this later
+      // Create a new object and only add the values that are needed
+      // const hiveResponse = {
+      //   hiveId: idToGet,
+      //   flow: flowObject.flow,
+      //   humidity: humidityObject.humidity,
+      //   temperature: temperatureObject.temperature,
+      //   weight: weightObject.weight
+      // }
+
+      // const weightObject = await BeehiveWeight.findOne({ hiveId: idToGet })
+      //   .sort({ date: -1 }) // Sorts by date in descending order, so the most recent date comes first
+      // .exec() // Executes the query
+
+      // const flowObject = await BeehiveFlow.findOne({ hiveId: idToGet })
+      //   .sort({ date: -1 })
+
+      // const humidityObject = await BeehiveHumidity.findOne({ hiveId: idToGet })
+      //   .sort({ date: -1 })
+
+      // const temperatureObject = await BeehiveTemperature.findOne({ hiveId: idToGet })
+      //   .sort({ date: -1 })
 
       // Get the latest weight from the database for the hive
       // const weight = await BeehiveWeight.findOne({ hiveId: idToGet }).sort({ timestamp: -1 })
@@ -115,7 +159,45 @@ export class HivesController {
 
       // Send the response to the client
       // No need to send the status code here, since it is automatically set to 200
-      // res.json(weight)
+      res.json(hiveResponse)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getRecentFlow (req, res, next) {
+    try {
+      const idToGet = req.params.id
+
+      const flowObject = await this.#getMostRecent(idToGet, BeehiveFlow)
+
+      // Create a new object and only add the values that are needed
+      const flowResponse = {
+        hiveId: flowObject.hiveId,
+        date: flowObject.date,
+        flow: flowObject.flow
+      }
+
+      res.json(flowResponse)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getRecentHumidity (req, res, next) {
+    try {
+      const idToGet = req.params.id
+
+      const humidityObject = await this.#getMostRecent(idToGet, BeehiveHumidity)
+
+      // Create a new object and only add the values that are needed
+      const humidityResponse = {
+        hiveId: humidityObject.hiveId,
+        date: humidityObject.date,
+        humidity: humidityObject.humidity
+      }
+
+      res.json(humidityResponse)
     } catch (error) {
       next(error)
     }
