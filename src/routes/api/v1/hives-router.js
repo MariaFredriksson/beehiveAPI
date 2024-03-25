@@ -16,6 +16,9 @@ const controller = new HivesController()
 // GET tasks
 // router.get('/', (req, res, next) => controller.getAll(req, res, next))
 
+// POST hives
+router.post('/', (req, res, next) => controller.addHive(req, res, next))
+
 // GET hives/:id
 router.get('/:id', (req, res, next) => controller.getHiveStatus(req, res, next))
 

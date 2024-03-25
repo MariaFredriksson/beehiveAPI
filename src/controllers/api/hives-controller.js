@@ -5,6 +5,7 @@
  * @version 1.0.0
  */
 
+import { Beehive } from './../../models/beehive.js'
 import { Resource } from '../../models/resource.js'
 import { BeehiveFlow } from './../../models/beehiveFlow.js'
 import { BeehiveHumidity } from './../../models/beehiveHumidity.js'
@@ -253,6 +254,49 @@ export class HivesController {
       }
 
       res.json(weightResponse)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Adds a new hive to the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+   */
+  // * This is called by doing a POST to http://localhost:5030/api/v1/hives
+  async addHive (req, res, next) {
+    try {
+      // Extract information from the request body
+      const { hiveId, name, location, registeredById } = req.body
+
+      // Validate the data as needed (e.g., check for missing fields)
+      // This is a simple example. Consider more thorough validation for production.
+      // ^^ Change this validation maybe...?
+      if ((!hiveId && hiveId !== 0) || !name || !location || !registeredById) {
+        return res.status(400).json({ message: 'Missing required fields' })
+      }
+
+      // ^^ Should hiveId be set by the user like this, or should it be given by the database?
+      // ^^ If it should be some simple number, how should it be kept track of, so there isn't two hives with the same id?
+      // ^^ Unique in the schema, but how should it be presented to the user if the id is taken?
+
+      // Create a new hive
+      const newHive = new Beehive({
+        hiveId,
+        name,
+        location,
+        registeredById
+      })
+
+      // Save the hive to the database
+      const savedHive = await newHive.save()
+
+      // Respond with the saved hive
+      res.status(201).json(savedHive)
     } catch (error) {
       next(error)
     }
