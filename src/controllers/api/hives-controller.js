@@ -5,6 +5,7 @@
  * @version 1.0.0
  */
 
+import { createLink } from './../../utils/linkUtils.js'
 import { Beehive } from './../../models/beehive.js'
 import { BeehiveFlow } from './../../models/beehiveFlow.js'
 import { BeehiveHarvest } from './../../models/beehiveHarvest.js'
@@ -53,8 +54,15 @@ export class HivesController {
       // Save the hive to the database
       const savedHive = await newHive.save()
 
-      // Respond with the saved hive
-      res.status(201).json(savedHive)
+      // Respond with the saved hive and hateoas links
+      res.status(201).json({
+        data: savedHive,
+        links: [
+          createLink(`/hives/${savedHive.hiveId}`, 'get-hive-status', 'GET'),
+          createLink(`/hives/${savedHive.hiveId}`, 'update-hive', 'PUT'),
+          createLink(`/hives/${savedHive.hiveId}`, 'delete-hive', 'DELETE')
+        ]
+      })
     } catch (error) {
       next(error)
     }
@@ -85,7 +93,17 @@ export class HivesController {
       }, { runValidators: true })
 
       // ^^ Can I include information about the updated hive in the response in some way?
-      res.status(204).end()
+      // res.status(204).end()
+
+      // Respond with the saved hive and hateoas links
+      res.status(200).json({
+        message: 'Hive updated successfully.',
+        links: [
+          createLink(`/hives/${hiveId}`, 'get-hive-status', 'GET'),
+          createLink(`/hives/${hiveId}`, 'delete-hive', 'DELETE'),
+          createLink('/hives', 'add-hive', 'POST')
+        ]
+      })
     } catch (error) {
       next(error)
     }
@@ -113,7 +131,13 @@ export class HivesController {
       // Find the resource to delete by id, and then delete it
       await Beehive.findOneAndDelete({ hiveId })
 
-      res.status(204).end()
+      // Respond with the saved hive and hateoas links
+      res.status(200).json({
+        message: 'Hive deleted successfully.',
+        links: [
+          createLink('/hives', 'add-hive', 'POST')
+        ]
+      })
     } catch (error) {
       next(error)
     }

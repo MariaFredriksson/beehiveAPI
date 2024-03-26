@@ -8,9 +8,19 @@
 import express from 'express'
 import { router as hivesRouter } from './hives-router.js'
 import { router as harvestRouter } from './harvest-router.js'
+import { createLink } from './../../../utils/linkUtils.js'
 
 export const router = express.Router()
 
-router.get('/', (req, res) => res.json({ message: 'Hooray! Welcome to the Beehive Monitoring API!' }))
+router.get('/', (req, res) => {
+  res.json({
+    message: 'Hooray! Welcome to the Beehive Monitoring API!',
+    links: [
+      createLink('/hives', 'add-hive', 'POST'),
+      createLink('/harvest', 'add-harvest', 'POST')
+    ]
+  })
+})
+
 router.use('/hives', hivesRouter)
 router.use('/harvest', harvestRouter)
