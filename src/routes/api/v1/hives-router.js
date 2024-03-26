@@ -14,6 +14,9 @@ export const router = express.Router()
 const hivesController = new HivesController()
 const statusController = new HiveStatusController()
 
+// GET hives
+router.get('/', (req, res, next) => hivesController.getAllHives(req, res, next))
+
 // POST hives
 router.post('/', (req, res, next) => hivesController.addHive(req, res, next))
 

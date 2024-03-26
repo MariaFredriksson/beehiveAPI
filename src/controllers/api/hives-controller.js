@@ -19,6 +19,41 @@ import { BeehiveWeight } from './../../models/beehiveWeight.js'
  */
 export class HivesController {
   /**
+   * Fetches all the hives from the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  // * This is called by doing a GET to http://localhost:5030/api/v1/hives
+  async getAllHives (req, res, next) {
+    try {
+      // Get all the hives from the database
+      const hives = await Beehive.find()
+
+      // Create an object with only the information needed
+      const hivesResponse = hives.map(hive => {
+        return {
+          hiveId: hive.hiveId,
+          name: hive.name,
+          location: hive.location,
+          registeredById: hive.registeredById
+        }
+      })
+
+      // Respond with the hives and hateoas links
+      res.status(200).json({
+        data: hivesResponse,
+        links: [
+          createLink('/hives', 'add-hive', 'POST')
+        ]
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
    * Adds a new hive to the database.
    *
    * @param {object} req - Express request object.
@@ -60,7 +95,8 @@ export class HivesController {
         links: [
           createLink(`/hives/${savedHive.hiveId}`, 'get-hive-status', 'GET'),
           createLink(`/hives/${savedHive.hiveId}`, 'update-hive', 'PUT'),
-          createLink(`/hives/${savedHive.hiveId}`, 'delete-hive', 'DELETE')
+          createLink(`/hives/${savedHive.hiveId}`, 'delete-hive', 'DELETE'),
+          createLink('/hives', 'get-all-hives', 'GET')
         ]
       })
     } catch (error) {
@@ -101,6 +137,7 @@ export class HivesController {
         links: [
           createLink(`/hives/${hiveId}`, 'get-hive-status', 'GET'),
           createLink(`/hives/${hiveId}`, 'delete-hive', 'DELETE'),
+          createLink('/hives', 'get-all-hives', 'GET'),
           createLink('/hives', 'add-hive', 'POST')
         ]
       })
@@ -135,6 +172,7 @@ export class HivesController {
       res.status(200).json({
         message: 'Hive deleted successfully.',
         links: [
+          createLink('/hives', 'get-all-hives', 'GET'),
           createLink('/hives', 'add-hive', 'POST')
         ]
       })

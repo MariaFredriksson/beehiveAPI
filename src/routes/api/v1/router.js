@@ -16,6 +16,7 @@ router.get('/', (req, res) => {
   res.json({
     message: 'Hooray! Welcome to the Beehive Monitoring API!',
     links: [
+      createLink('/hives', 'get-all-hives', 'GET'),
       createLink('/hives', 'add-hive', 'POST'),
       createLink('/harvest', 'add-harvest', 'POST')
     ]
