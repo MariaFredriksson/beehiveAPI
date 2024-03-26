@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
     links: [
       createLink('/hives', 'get-all-hives', 'GET'),
       createLink('/hives', 'add-hive', 'POST'),
+      createLink('/harvest', 'get-all-harvests', 'GET'),
       createLink('/harvest', 'add-harvest', 'POST')
     ]
   })

@@ -12,5 +12,8 @@ export const router = express.Router()
 
 const controller = new HarvestController()
 
+// GET harvests
+router.get('/', (req, res, next) => controller.getAllHarvests(req, res, next))
+
 // POST harvest
 router.post('/', (req, res, next) => controller.addHarvest(req, res, next))
