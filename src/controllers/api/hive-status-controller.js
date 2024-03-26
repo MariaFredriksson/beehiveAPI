@@ -77,10 +77,14 @@ export class HiveStatusController {
    * @param {string} hiveId - The id of the hive to get the information about.
    * @param {object} model - The model to get the resource from.
    * @param {string} dataType - The type of data to get.
-   * @returns {object} - The most recent data from the specified model.
+   * @returns {object} - The most recent data from the specified model, or null if there is no data.
    */
   #getMostRecent = async (hiveId, model, dataType) => {
     const databaseResponse = await model.findOne({ hiveId }).sort({ date: -1 })
+
+    if (!databaseResponse) {
+      return null
+    }
 
     // Create a new object and only add the values that are needed
     const response = {
@@ -157,13 +161,10 @@ export class HiveStatusController {
     try {
       const id = req.params.id
 
-      const flowObject = await this.#getMostRecent(id, BeehiveFlow)
-
-      const humidityObject = await this.#getMostRecent(id, BeehiveHumidity)
-
-      const temperatureObject = await this.#getMostRecent(id, BeehiveTemperature)
-
-      const weightObject = await this.#getMostRecent(id, BeehiveWeight)
+      const flowObject = await this.#getMostRecent(id, BeehiveFlow, 'flow')
+      const humidityObject = await this.#getMostRecent(id, BeehiveHumidity, 'humidity')
+      const temperatureObject = await this.#getMostRecent(id, BeehiveTemperature, 'temperature')
+      const weightObject = await this.#getMostRecent(id, BeehiveWeight, 'weight')
 
       // Initialize the hiveResponse object with the hiveId
       const hiveResponse = { hiveId: id }
@@ -188,29 +189,31 @@ export class HiveStatusController {
       // No need to send the status code here, since it is automatically set to 200
       res.json(hiveResponse)
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }
 
   /**
-   * Sends a JSON response containing the most recent flow object.
+   * Sends a JSON response containing flow object.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
   // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/flow
-  async getRecentFlow (req, res, next) {
+  async getFlow (req, res, next) {
     try {
       const id = req.params.id
 
-      const flowObject = await this.#getMostRecent(id, BeehiveFlow)
+      const { startDate, endDate } = req.query
 
-      // Create a new object and only add the values that are needed
-      const flowResponse = {
-        hiveId: flowObject.hiveId,
-        date: flowObject.date,
-        flow: flowObject.flow
+      let flowResponse = {}
+
+      if (!startDate || !endDate) {
+        flowResponse = await this.#getMostRecent(id, BeehiveFlow, 'flow')
+      } else {
+        flowResponse = await this.#getDataWithinTimeframe(BeehiveFlow, 'flow', id, startDate, endDate)
       }
 
       res.json(flowResponse)
@@ -220,7 +223,7 @@ export class HiveStatusController {
   }
 
   /**
-   * Sends a JSON response containing the most recent humidity object.
+   * Sends a JSON response containing humidity object.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -248,24 +251,25 @@ export class HiveStatusController {
   }
 
   /**
-   * Sends a JSON response containing the most recent temperature object.
+   * Sends a JSON response containing temperature object.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
   // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/temperature
-  async getRecentTemperature (req, res, next) {
+  async getTemperature (req, res, next) {
     try {
       const id = req.params.id
 
-      const temperatureObject = await this.#getMostRecent(id, BeehiveTemperature)
+      const { startDate, endDate } = req.query
 
-      // Create a new object and only add the values that are needed
-      const temperatureResponse = {
-        hiveId: temperatureObject.hiveId,
-        date: temperatureObject.date,
-        temperature: temperatureObject.temperature
+      let temperatureResponse = {}
+
+      if (!startDate || !endDate) {
+        temperatureResponse = await this.#getMostRecent(id, BeehiveTemperature, 'temperature')
+      } else {
+        temperatureResponse = await this.#getDataWithinTimeframe(BeehiveTemperature, 'temperature', id, startDate, endDate)
       }
 
       res.json(temperatureResponse)
@@ -275,24 +279,25 @@ export class HiveStatusController {
   }
 
   /**
-   * Sends a JSON response containing the most recent weight object.
+   * Sends a JSON response containing weight object.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
   // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/weight
-  async getRecentWeight (req, res, next) {
+  async getWeight (req, res, next) {
     try {
       const id = req.params.id
 
-      const weightObject = await this.#getMostRecent(id, BeehiveWeight)
+      const { startDate, endDate } = req.query
 
-      // Create a new object and only add the values that are needed
-      const weightResponse = {
-        hiveId: weightObject.hiveId,
-        date: weightObject.date,
-        weight: weightObject.weight
+      let weightResponse = {}
+
+      if (!startDate || !endDate) {
+        weightResponse = await this.#getMostRecent(id, BeehiveWeight, 'weight')
+      } else {
+        weightResponse = await this.#getDataWithinTimeframe(BeehiveWeight, 'weight', id, startDate, endDate)
       }
 
       res.json(weightResponse)

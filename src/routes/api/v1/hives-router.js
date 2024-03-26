@@ -28,13 +28,13 @@ router.put('/:id', (req, res, next) => hivesController.updateHive(req, res, next
 router.get('/:id', (req, res, next) => statusController.getHiveStatus(req, res, next))
 
 // GET hives/:id/flow
-router.get('/:id/flow', (req, res, next) => statusController.getRecentFlow(req, res, next))
+router.get('/:id/flow', (req, res, next) => statusController.getFlow(req, res, next))
 
 // GET hives/:id/humidity
 router.get('/:id/humidity', (req, res, next) => statusController.getHumidity(req, res, next))
 
 // GET hives/:id/temperature
-router.get('/:id/temperature', (req, res, next) => statusController.getRecentTemperature(req, res, next))
+router.get('/:id/temperature', (req, res, next) => statusController.getTemperature(req, res, next))
 
 // GET hives/:id/weight
-router.get('/:id/weight', (req, res, next) => statusController.getRecentWeight(req, res, next))
+router.get('/:id/weight', (req, res, next) => statusController.getWeight(req, res, next))
