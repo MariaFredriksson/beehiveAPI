@@ -21,6 +21,9 @@ const statusController = new HiveStatusController()
 // POST hives
 router.post('/', (req, res, next) => hivesController.addHive(req, res, next))
 
+// PUT hives/:id
+router.put('/:id', (req, res, next) => hivesController.updateHive(req, res, next))
+
 // GET hives/:id
 router.get('/:id', (req, res, next) => statusController.getHiveStatus(req, res, next))
 

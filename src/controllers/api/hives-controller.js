@@ -54,4 +54,35 @@ export class HivesController {
       next(error)
     }
   }
+
+  /**
+   * Updates a hive in the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+   */
+  // * This is called by doing a PUT to http://localhost:5030/api/v1/hives/:id
+  async updateHive (req, res, next) {
+    try {
+      const hiveId = req.params.id
+      const { name, location } = req.body
+
+      if (!name || !location) {
+        return res.status(400).json({ message: 'Missing required fields' })
+      }
+
+      // Find the resource to update by id, and then update it
+      await Beehive.findOneAndUpdate({ id: hiveId }, {
+        name,
+        location
+      }, { runValidators: true })
+
+      // ^^ Can I include information about the updated hive in the response in some way?
+      res.status(204).end()
+    } catch (error) {
+      next(error)
+    }
+  }
 }
