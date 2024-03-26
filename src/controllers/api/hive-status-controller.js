@@ -5,6 +5,7 @@
  * @version 1.0.0
  */
 
+import { Beehive } from '../../models/beehive.js'
 import { BeehiveFlow } from './../../models/beehiveFlow.js'
 import { BeehiveHumidity } from './../../models/beehiveHumidity.js'
 import { BeehiveTemperature } from './../../models/beehiveTemperature.js'
@@ -84,6 +85,8 @@ export class HiveStatusController {
     try {
       const id = req.params.id
 
+      const hiveInfo = await Beehive.findOne({ hiveId: id })
+
       const flowObject = await this.#getMostRecent(id, BeehiveFlow, 'flow')
       const humidityObject = await this.#getMostRecent(id, BeehiveHumidity, 'humidity')
       const temperatureObject = await this.#getMostRecent(id, BeehiveTemperature, 'temperature')
@@ -93,6 +96,7 @@ export class HiveStatusController {
       const hiveResponse = { hiveId: id }
 
       // Only add the properties to hiveResponse if the relevant object is not null
+      if (hiveInfo) hiveResponse.location = hiveInfo.location
       if (flowObject) hiveResponse.flow = flowObject.flow
       if (humidityObject) hiveResponse.humidity = humidityObject.humidity
       if (temperatureObject) hiveResponse.temperature = temperatureObject.temperature
