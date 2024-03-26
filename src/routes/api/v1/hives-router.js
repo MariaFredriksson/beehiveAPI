@@ -31,7 +31,7 @@ router.get('/:id', (req, res, next) => statusController.getHiveStatus(req, res, 
 router.get('/:id/flow', (req, res, next) => statusController.getRecentFlow(req, res, next))
 
 // GET hives/:id/humidity
-router.get('/:id/humidity', (req, res, next) => statusController.getRecentHumidity(req, res, next))
+router.get('/:id/humidity', (req, res, next) => statusController.getHumidity(req, res, next))
 
 // GET hives/:id/temperature
 router.get('/:id/temperature', (req, res, next) => statusController.getRecentTemperature(req, res, next))

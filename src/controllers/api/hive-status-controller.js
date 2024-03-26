@@ -83,6 +83,37 @@ export class HiveStatusController {
   }
 
   /**
+   * Fetches the data within the specified timeframe from the specified model.
+   *
+   * @param {object} model - The model to get the resource from.
+   * @param {string} dataType - The type of data to get.
+   * @param {string} hiveId - The id of the hive to get the information about.
+   * @param {string} startDate - The start date of the timeframe.
+   * @param {string} endDate - The end date of the timeframe.
+   * @returns {object} - The data within the specified timeframe from the specified model.
+   */
+  async #getDataWithinTimeframe (model, dataType, hiveId, startDate, endDate) {
+    // Get the data from the database
+    const data = await model.find({
+      hiveId,
+      date: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
+      }
+    }).sort({ date: 1 }) // Sorting by date ascending
+
+    // Formatting the response
+    const response = data.map(item => ({
+      hiveId: item.hiveId,
+      date: item.date,
+      // Using bracket notation to dynamically access property based on dataType
+      [dataType]: item[dataType]
+    }))
+
+    return response
+  }
+
+  /**
    * Sends a JSON response containing all resources.
    *
    * @param {object} req - Express request object.
@@ -185,17 +216,26 @@ export class HiveStatusController {
    * @param {Function} next - Express next middleware function.
    */
   // * This is called by doing a GET to http://localhost:5030/api/v1/hives/:id/humidity
-  async getRecentHumidity (req, res, next) {
+  async getHumidity (req, res, next) {
     try {
       const id = req.params.id
 
-      const humidityObject = await this.#getMostRecent(id, BeehiveHumidity)
+      // ^^ Should I get this information from the query or from the body?
+      const { startDate, endDate } = req.query
 
-      // Create a new object and only add the values that are needed
-      const humidityResponse = {
-        hiveId: humidityObject.hiveId,
-        date: humidityObject.date,
-        humidity: humidityObject.humidity
+      let humidityResponse = {}
+
+      if (!startDate || !endDate) {
+        const humidityObject = await this.#getMostRecent(id, BeehiveHumidity)
+
+        // Create a new object and only add the values that are needed
+        humidityResponse = {
+          hiveId: humidityObject.hiveId,
+          date: humidityObject.date,
+          humidity: humidityObject.humidity
+        }
+      } else {
+        humidityResponse = await this.#getDataWithinTimeframe(BeehiveHumidity, 'humidity', id, startDate, endDate)
       }
 
       res.json(humidityResponse)
