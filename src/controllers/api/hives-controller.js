@@ -6,6 +6,11 @@
  */
 
 import { Beehive } from './../../models/beehive.js'
+import { BeehiveFlow } from './../../models/beehiveFlow.js'
+import { BeehiveHarvest } from './../../models/beehiveHarvest.js'
+import { BeehiveHumidity } from './../../models/beehiveHumidity.js'
+import { BeehiveTemperature } from './../../models/beehiveTemperature.js'
+import { BeehiveWeight } from './../../models/beehiveWeight.js'
 // import createError from 'http-errors'
 
 /**
@@ -80,6 +85,34 @@ export class HivesController {
       }, { runValidators: true })
 
       // ^^ Can I include information about the updated hive in the response in some way?
+      res.status(204).end()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Deletes a hive and all the statistics about it from the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  // * This is called by doing a DELETE to http://localhost:5030/api/v1/hives/:id
+  async deleteHive (req, res, next) {
+    try {
+      const hiveId = req.params.id
+
+      // Delete all the flow, humidity, temperature, weight and harvest data for the hive as well
+      await BeehiveFlow.deleteMany({ hiveId })
+      await BeehiveHumidity.deleteMany({ hiveId })
+      await BeehiveTemperature.deleteMany({ hiveId })
+      await BeehiveWeight.deleteMany({ hiveId })
+      await BeehiveHarvest.deleteMany({ hiveId })
+
+      // Find the resource to delete by id, and then delete it
+      await Beehive.findOneAndDelete({ hiveId })
+
       res.status(204).end()
     } catch (error) {
       next(error)
