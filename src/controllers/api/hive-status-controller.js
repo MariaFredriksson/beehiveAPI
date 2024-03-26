@@ -72,14 +72,25 @@ export class HiveStatusController {
   }
 
   /**
-   * Fetches the most recent object from the specified model.
+   * Fetches the most recent data from the specified model.
    *
-   * @param {string} id - The id of the hive to get the information about.
+   * @param {string} hiveId - The id of the hive to get the information about.
    * @param {object} model - The model to get the resource from.
-   * @returns {object} - The most recent object from the specified model.
+   * @param {string} dataType - The type of data to get.
+   * @returns {object} - The most recent data from the specified model.
    */
-  #getMostRecent = async (id, model) => {
-    return await model.findOne({ hiveId: id }).sort({ date: -1 })
+  #getMostRecent = async (hiveId, model, dataType) => {
+    const databaseResponse = await model.findOne({ hiveId }).sort({ date: -1 })
+
+    // Create a new object and only add the values that are needed
+    const response = {
+      hiveId: databaseResponse.hiveId,
+      date: databaseResponse.date,
+      // Using bracket notation to dynamically access property based on dataType
+      [dataType]: databaseResponse[dataType]
+    }
+
+    return response
   }
 
   /**
@@ -220,20 +231,12 @@ export class HiveStatusController {
     try {
       const id = req.params.id
 
-      // ^^ Should I get this information from the query or from the body?
       const { startDate, endDate } = req.query
 
       let humidityResponse = {}
 
       if (!startDate || !endDate) {
-        const humidityObject = await this.#getMostRecent(id, BeehiveHumidity)
-
-        // Create a new object and only add the values that are needed
-        humidityResponse = {
-          hiveId: humidityObject.hiveId,
-          date: humidityObject.date,
-          humidity: humidityObject.humidity
-        }
+        humidityResponse = await this.#getMostRecent(id, BeehiveHumidity, 'humidity')
       } else {
         humidityResponse = await this.#getDataWithinTimeframe(BeehiveHumidity, 'humidity', id, startDate, endDate)
       }
