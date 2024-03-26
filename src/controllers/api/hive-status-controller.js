@@ -1,5 +1,5 @@
 /**
- * Module for the HivesController.
+ * Module for the HiveStatusController.
  *
  * @author Maria Fredriksson
  * @version 1.0.0
@@ -23,6 +23,7 @@ export class HiveStatusController {
    * @returns {object} - The most recent data from the specified model, or null if there is no data.
    */
   #getMostRecent = async (hiveId, model, dataType) => {
+    // ^^ Maybe fix so that it can return more data, if the data is registered at the same time?
     const databaseResponse = await model.findOne({ hiveId }).sort({ date: -1 })
 
     if (!databaseResponse) {
