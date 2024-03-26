@@ -8,6 +8,7 @@
 import express from 'express'
 import { router as hivesRouter } from './hives-router.js'
 import { router as harvestRouter } from './harvest-router.js'
+import { router as mobileBeehiveRouter } from './mobile-beehive-router.js'
 import { createLink } from './../../../utils/linkUtils.js'
 
 export const router = express.Router()
@@ -26,3 +27,6 @@ router.get('/', (req, res) => {
 
 router.use('/hives', hivesRouter)
 router.use('/harvest', harvestRouter)
+router.use('/mobile-beehive-request', mobileBeehiveRouter)
+
+// TODO: Lägg till hateoas för mobile-beehive-request
