@@ -5,7 +5,8 @@
  * @version 1.0.0
  */
 
-import { Beehive } from '../../models/beehive.js'
+import { Beehive } from './../../models/beehive.js'
+import { createLink } from './../../utils/linkUtils.js'
 import { BeehiveFlow } from './../../models/beehiveFlow.js'
 import { BeehiveHumidity } from './../../models/beehiveHumidity.js'
 import { BeehiveTemperature } from './../../models/beehiveTemperature.js'
@@ -114,9 +115,18 @@ export class HiveStatusController {
       //   weight: weightObject.weight
       // }
 
-      // Send the response to the client
+      // Send the response to the client and hateoas links
       // No need to send the status code here, since it is automatically set to 200
-      res.json(hiveResponse)
+      res.json({
+        data: hiveResponse,
+        links: [
+          createLink(`/hives/${id}/flow`, 'hive-flow', 'GET'),
+          createLink(`/hives/${id}/humidity`, 'hive-humidity', 'GET'),
+          createLink(`/hives/${id}/temperature`, 'hive-temperature', 'GET'),
+          createLink(`/hives/${id}/weight`, 'hive-weight', 'GET'),
+          createLink('/hives', 'get-all-hives', 'GET')
+        ]
+      })
     } catch (error) {
       console.log(error)
       next(error)
@@ -145,7 +155,16 @@ export class HiveStatusController {
         flowResponse = await this.#getDataWithinTimeframe(BeehiveFlow, 'flow', id, startDate, endDate)
       }
 
-      res.json(flowResponse)
+      res.json({
+        data: flowResponse,
+        links: [
+          createLink(`/hives/${id}`, 'get-hive-status', 'GET'),
+          createLink(`/hives/${id}/humidity`, 'hive-humidity', 'GET'),
+          createLink(`/hives/${id}/temperature`, 'hive-temperature', 'GET'),
+          createLink(`/hives/${id}/weight`, 'hive-weight', 'GET'),
+          createLink('/hives', 'get-all-hives', 'GET')
+        ]
+      })
     } catch (error) {
       next(error)
     }
@@ -173,7 +192,16 @@ export class HiveStatusController {
         humidityResponse = await this.#getDataWithinTimeframe(BeehiveHumidity, 'humidity', id, startDate, endDate)
       }
 
-      res.json(humidityResponse)
+      res.json({
+        data: humidityResponse,
+        links: [
+          createLink(`/hives/${id}`, 'get-hive-status', 'GET'),
+          createLink(`/hives/${id}/flow`, 'hive-flow', 'GET'),
+          createLink(`/hives/${id}/temperature`, 'hive-temperature', 'GET'),
+          createLink(`/hives/${id}/weight`, 'hive-weight', 'GET'),
+          createLink('/hives', 'get-all-hives', 'GET')
+        ]
+      })
     } catch (error) {
       next(error)
     }
@@ -201,7 +229,16 @@ export class HiveStatusController {
         temperatureResponse = await this.#getDataWithinTimeframe(BeehiveTemperature, 'temperature', id, startDate, endDate)
       }
 
-      res.json(temperatureResponse)
+      res.json({
+        data: temperatureResponse,
+        links: [
+          createLink(`/hives/${id}`, 'get-hive-status', 'GET'),
+          createLink(`/hives/${id}/flow`, 'hive-flow', 'GET'),
+          createLink(`/hives/${id}/humidity`, 'hive-humidity', 'GET'),
+          createLink(`/hives/${id}/weight`, 'hive-weight', 'GET'),
+          createLink('/hives', 'get-all-hives', 'GET')
+        ]
+      })
     } catch (error) {
       next(error)
     }
@@ -229,7 +266,16 @@ export class HiveStatusController {
         weightResponse = await this.#getDataWithinTimeframe(BeehiveWeight, 'weight', id, startDate, endDate)
       }
 
-      res.json(weightResponse)
+      res.json({
+        data: weightResponse,
+        links: [
+          createLink(`/hives/${id}`, 'get-hive-status', 'GET'),
+          createLink(`/hives/${id}/flow`, 'hive-flow', 'GET'),
+          createLink(`/hives/${id}/humidity`, 'hive-humidity', 'GET'),
+          createLink(`/hives/${id}/temperature`, 'hive-temperature', 'GET'),
+          createLink('/hives', 'get-all-hives', 'GET')
+        ]
+      })
     } catch (error) {
       next(error)
     }
