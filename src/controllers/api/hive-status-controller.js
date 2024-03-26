@@ -95,6 +95,8 @@ export class HiveStatusController {
       // Initialize the hiveResponse object with the hiveId
       const hiveResponse = { hiveId: id }
 
+      // ^^ Maybe change so that one can get more data if the data is registered at the same time?
+      // ^^ And maybe also get the date for the data?
       // Only add the properties to hiveResponse if the relevant object is not null
       if (hiveInfo) hiveResponse.location = hiveInfo.location
       if (flowObject) hiveResponse.flow = flowObject.flow
