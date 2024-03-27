@@ -10,6 +10,7 @@ import { router as hivesRouter } from './hives-router.js'
 import { router as harvestRouter } from './harvest-router.js'
 import { router as mobileBeehiveRouter } from './mobile-beehive-router.js'
 import { router as userRouter } from './user-router.js'
+import { router as webhookRouter } from './webhook-router.js'
 import { createLink } from './../../../utils/linkUtils.js'
 import createHttpError from 'http-errors'
 import jwt from 'jsonwebtoken'
@@ -92,7 +93,8 @@ router.get('/', (req, res) => {
       createLink('/harvest', 'get-all-harvests', 'GET'),
       createLink('/harvest', 'add-harvest', 'POST'),
       createLink('/mobile-beehive-request', 'get-all-mobile-beehive-requests', 'GET'),
-      createLink('/mobile-beehive-request', 'add-mobile-beehive-request', 'POST')
+      createLink('/mobile-beehive-request', 'add-mobile-beehive-request', 'POST'),
+      createLink('/webhook/register', 'register-webhook', 'POST')
     ]
   })
 })
@@ -104,3 +106,4 @@ router.use('/user', userRouter)
 router.use('/hives', authenticateJWT, hivesRouter)
 router.use('/harvest', authenticateJWT, isFarmer, harvestRouter)
 router.use('/mobile-beehive-request', authenticateJWT, isFarmer, mobileBeehiveRouter)
+router.use('/webhook', authenticateJWT, webhookRouter)

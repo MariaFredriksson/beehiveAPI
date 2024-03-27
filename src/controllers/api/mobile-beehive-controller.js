@@ -7,6 +7,7 @@
 
 import { createLink } from './../../utils/linkUtils.js'
 import { MobileBeehiveRequest } from './../../models/mobileBeehiveRequest.js'
+import { WebhookController } from './webhook-controller.js'
 
 /**
  * Encapsulates a controller.
@@ -86,6 +87,10 @@ export class MobileBeehiveController {
           createLink('/mobile-beehive-request', 'get-all-mobile-beehive-requests', 'GET')
         ]
       })
+
+      // After sending the response, trigger the webhooks
+      // No need to await this function as we don't need to wait for it to finish
+      WebhookController.triggerWebhooks('addedHiveRequest', savedMobileBeehiveRequest)
     } catch (error) {
       // Pass any errors to the error-handling middleware
       next(error)
