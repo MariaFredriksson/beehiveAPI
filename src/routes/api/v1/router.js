@@ -20,7 +20,9 @@ router.get('/', (req, res) => {
       createLink('/hives', 'get-all-hives', 'GET'),
       createLink('/hives', 'add-hive', 'POST'),
       createLink('/harvest', 'get-all-harvests', 'GET'),
-      createLink('/harvest', 'add-harvest', 'POST')
+      createLink('/harvest', 'add-harvest', 'POST'),
+      createLink('/mobile-beehive-request', 'get-all-mobile-beehive-requests', 'GET'),
+      createLink('/mobile-beehive-request', 'add-mobile-beehive-request', 'POST')
     ]
   })
 })
@@ -28,5 +30,3 @@ router.get('/', (req, res) => {
 router.use('/hives', hivesRouter)
 router.use('/harvest', harvestRouter)
 router.use('/mobile-beehive-request', mobileBeehiveRouter)
-
-// TODO: Lägg till hateoas för mobile-beehive-request

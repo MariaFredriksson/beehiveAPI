@@ -7,7 +7,6 @@
 
 import { createLink } from './../../utils/linkUtils.js'
 import { MobileBeehiveRequest } from './../../models/mobileBeehiveRequest.js'
-// import { BeehiveHarvest } from './../../models/beehiveHarvest.js'
 
 /**
  * Encapsulates a controller.
@@ -23,24 +22,24 @@ export class MobileBeehiveController {
   // * This is called by doing a GET to http://localhost:5030/api/v1/mobile-beehive-request
   async getAllMobileBeehiveRequests (req, res, next) {
     try {
-      // Get all the harvests from the database
-      const harvests = await BeehiveHarvest.find()
+      // Get all the mobile beehive requests from the database
+      const mobileBeehiveRequests = await MobileBeehiveRequest.find()
 
       // Create an object with only the information needed
-      const harvestsResponse = harvests.map(harvest => {
+      const mobileBeehiveRequestsResponse = mobileBeehiveRequests.map(mobileBeehiveRequest => {
         return {
-          hiveId: harvest.hiveId,
-          date: harvest.date,
-          amount: harvest.amount,
-          userId: harvest.userId
+          location: mobileBeehiveRequest.location,
+          startDate: mobileBeehiveRequest.startDate,
+          endDate: mobileBeehiveRequest.endDate,
+          requestedById: mobileBeehiveRequest.requestedById
         }
       })
 
-      // Respond with the harvests and hateoas links
+      // Respond with the mobile beehive requests and hateoas links
       res.status(200).json({
-        data: harvestsResponse,
+        data: mobileBeehiveRequestsResponse,
         links: [
-          createLink('/harvest', 'add-harvest', 'POST')
+          createLink('/mobile-beehive-request', 'add-mobile-beehive-request', 'POST')
         ]
       })
     } catch (error) {
@@ -60,33 +59,31 @@ export class MobileBeehiveController {
   async addMobileBeehiveRequest (req, res, next) {
     try {
       // Extract information from the request body
-      const { hiveId, date, amount, userId } = req.body
+      const { location, startDate, endDate, requestedById } = req.body
 
       // Validate the data as needed (e.g., check for missing fields)
       // This is a simple example. Consider more thorough validation for production.
       // ^^ Change this validation maybe...?
-      if ((!hiveId && hiveId !== 0) || !date || !amount || !userId) {
-        // ^^ Do I really need ta have a return here...?
+      if (!location || !startDate || !endDate || !requestedById) {
         return res.status(400).json({ message: 'Missing required fields' })
       }
 
-      // Create a new harvest report
-      const newHarvest = new BeehiveHarvest({
-        hiveId,
-        date,
-        amount,
-        userId
+      // Create a new mobile beehive request
+      const newMobileBeehiveRequest = new MobileBeehiveRequest({
+        location,
+        startDate,
+        endDate,
+        requestedById
       })
 
-      // Save the harvest report to the database
-      const savedHarvest = await newHarvest.save()
+      // Save the mobile beehive request to the database
+      const savedMobileBeehiveRequest = await newMobileBeehiveRequest.save()
 
-      // Respond with the saved harvest report
-      // ^^ Consider using .toJSON() if you want to apply transformations like removing _id and __v
+      // Respond with the saved mobile beehive request and hateoas links
       res.status(201).json({
-        data: savedHarvest,
+        data: savedMobileBeehiveRequest,
         links: [
-          createLink('/harvest', 'get-all-harvests', 'GET')
+          createLink('/mobile-beehive-request', 'get-all-mobile-beehive-requests', 'GET')
         ]
       })
     } catch (error) {

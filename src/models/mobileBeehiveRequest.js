@@ -9,11 +9,6 @@ import mongoose from 'mongoose'
 
 // Create a schema.
 const mobileBeehiveRequestSchema = new mongoose.Schema({
-  hiveId: {
-    type: Number,
-    required: true,
-    unique: true
-  },
   location: {
     type: String,
     required: true
