@@ -60,6 +60,25 @@ const authenticateJWT = (req, res, next) => {
   }
 }
 
+/**
+ * Checks if the user is a farmer.
+ * If the user is a farmer, the request is authorized to continue.
+ * If the user is not a farmer, a forbidden response will be sent.
+ *
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
+const isFarmer = (req, res, next) => {
+  if (req.user.role === 'farmer') {
+    next()
+  } else {
+    const error = createHttpError(403)
+    error.message = 'You are not authorized to access this resource.'
+    next(error)
+  }
+}
+
 export const router = express.Router()
 
 router.get('/', (req, res) => {
@@ -83,5 +102,5 @@ router.use('/user', userRouter)
 
 // Apply authenticateJWT middleware before accessing the specific routes
 router.use('/hives', authenticateJWT, hivesRouter)
-router.use('/harvest', authenticateJWT, harvestRouter)
-router.use('/mobile-beehive-request', authenticateJWT, mobileBeehiveRouter)
+router.use('/harvest', authenticateJWT, isFarmer, harvestRouter)
+router.use('/mobile-beehive-request', authenticateJWT, isFarmer, mobileBeehiveRouter)
