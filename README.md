@@ -9,6 +9,7 @@ The Beehive Monitoring System API is designed to enable users to manage and moni
 - [Base URL](#base-url)
 - [API Overview](#api-overview)
 - [Authentication](#authentication)
+- [Postman Testing](#postman-testing)
 - [Endpoints](#endpoints)
   - [User Management](#user-management)
   - [Beehive Management](#beehive-management)
@@ -45,6 +46,9 @@ GET /hives
 Authorization: Bearer YOUR_ACCESS_TOKEN
 ```
 
+
+## Postman Testing
+The endpoints can be tested using Postman. There is a file named `API 1dv027.postman_collection.json` that can be imported to Postman and run there to try the endpoints and also run some tests on them.
 
 ## Endpoints
 
