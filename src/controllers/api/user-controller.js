@@ -90,11 +90,20 @@ export class UserController {
 
       console.log(`User ${beehiveUser.email} registered.`)
 
-      // ^^ Is it maybe a dumb idea to send the whole user object back to the client? With the (hashed and salted) password and all? Maybe we should only send some information?
+      // Make an object with only some of the user data and send it back to the client.
+      const userResponse = {
+        id: beehiveUser.id,
+        email: beehiveUser.email,
+        firstName: beehiveUser.firstName,
+        lastName: beehiveUser.lastName,
+        role: beehiveUser.role,
+        createdAt: beehiveUser.createdAt
+      }
+
       res
         .status(201)
         .json({
-          data: beehiveUser,
+          data: userResponse,
           links: [
             createLink('/user/login', 'login', 'POST')
           ]
