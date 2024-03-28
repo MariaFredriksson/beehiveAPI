@@ -7,8 +7,7 @@ import { BeehiveTemperature } from '../models/beehiveTemperature.js'
 import { BeehiveWeight } from './../models/beehiveWeight.js'
 import { connectDB } from '../config/mongoose.js'
 
-// ! Change in config/mongoose when committing!!!
-// ! So the import is done so the connections string is read from the env file again
+// & Run with node --inspect -r dotenv/config src/utils/importer.js
 
 /**
  * Returns the Mongoose model for the specified data type.
@@ -29,6 +28,27 @@ const getModelForDataType = (dataType) => {
     // Add cases for other data types/models
     default:
       throw new Error(`Unknown data type: ${dataType}`)
+  }
+}
+
+/**
+ * Validates the value based on the data type.
+ *
+ * @param {string} dataType - The type of data being imported.
+ * @param {number} value - The value to validate.
+ * @returns {boolean} True if the value is valid, false otherwise.
+ */
+const isValidValue = (dataType, value) => {
+  switch (dataType) {
+    case 'flow':
+    case 'temperature':
+      return true // No specific checks for flow and temperature
+    case 'weight':
+      return value >= 0 // Weight must be 0 or more
+    case 'humidity':
+      return value >= 0 && value <= 100 // Humidity must be between 0 and 100
+    default:
+      return false // Unknown data type
   }
 }
 
@@ -85,8 +105,10 @@ const insertBatch = async (batch, Model) => {
  * @param {number} hiveId - The ID of the beehive to import data for.
  * @param {string} dataType - The type of data to import (e.g. 'flow', 'humidity', etc.).
  * @param {number} batchSize - The number of records to insert in each batch. Default is 500.
+ * @param {number} skipInterval - The interval at which to skip rows. For example, 3 means every third row is processed. Default is 1.
  */
-const importDataFromCSV = (filePath, hiveId, dataType, batchSize = 500) => {
+const importDataFromCSV = (filePath, hiveId, dataType, batchSize = 500, skipInterval = 1) => {
+  let rowCount = 0 // Counter to keep track of the current row
   const records = [] // Array to hold the parsed records
   const model = getModelForDataType(dataType) // Get the appropriate model
 
@@ -97,13 +119,22 @@ const importDataFromCSV = (filePath, hiveId, dataType, batchSize = 500) => {
         skip_empty_lines: true
       }))
       .on('data', async (csvRow) => {
-        const record = {
-          hiveId,
-          date: new Date(csvRow.timestamp)
-        }
-        record[dataType] = parseFloat(csvRow[dataType]) // Dynamically set the value based on dataType
+        rowCount++
+        // Only process rows based on the skipInterval
+        if (rowCount % skipInterval === 0) {
+          const value = parseFloat(csvRow[dataType]) // Convert value from CSV to float
 
-        records.push(record) // Add record to the current batch
+          // Validate the value based on dataType
+          if (!isNaN(value) && isValidValue(dataType, value)) {
+            const record = {
+              hiveId,
+              date: new Date(csvRow.timestamp),
+              [dataType]: value
+            }
+
+            records.push(record) // Add record to the current batch
+          }
+        }
 
         // If the batch size is reached, insert the batch and clear the records array
         if (records.length >= batchSize) {
@@ -134,27 +165,20 @@ const importDataFromCSV = (filePath, hiveId, dataType, batchSize = 500) => {
   })
 }
 
-// ! Change in config/mongoose when committing!!!
-// ! So the import is done so the connections string is read from the env file again
-
-// & Run with node src/utils/importer.js
+// & Run with node --inspect -r dotenv/config src/utils/importer.js
 
 // Connect to MongoDB
 await connectDB()
 
 // & Upload data from all the files, or comment out the ones you don't want to upload
-// importDataFromCSV('./../beehive_data/flow_2017.csv', 0, 'flow')
-importDataFromCSV('./../beehive_data/flow_schwartau.csv', 1, 'flow')
-// importDataFromCSV('./../beehive_data/flow_wurzburg.csv', 2, 'flow')
-// importDataFromCSV('./../beehive_data/humidity_2017.csv', 0, 'humidity')
-// importDataFromCSV('./../beehive_data/humidity_schwartau.csv', 1, 'humidity')
-// importDataFromCSV('./../beehive_data/humidity_wurzburg.csv', 2, 'humidity')
-// importDataFromCSV('./../beehive_data/temperature_2017.csv', 0, 'temperature')
-// importDataFromCSV('./../beehive_data/temperature_schwartau.csv', 1, 'temperature')
-// importDataFromCSV('./../beehive_data/temperature_wurzburg.csv', 2, 'temperature')
-// importDataFromCSV('./../beehive_data/weight_2017.csv', 0, 'weight')
-// importDataFromCSV('./../beehive_data/weight_schwartau.csv', 1, 'weight')
-// importDataFromCSV('./../beehive_data/weight_wurzburg.csv', 2, 'weight')
+// importDataFromCSV('./../beehive_data/flow_schwartau.csv', 0, 'flow', 500, 20)
+// importDataFromCSV('./../beehive_data/flow_wurzburg.csv', 1, 'flow', 500, 20)
+// importDataFromCSV('./../beehive_data/humidity_schwartau.csv', 0, 'humidity', 10)
+// importDataFromCSV('./../beehive_data/humidity_wurzburg.csv', 1, 'humidity')
+// importDataFromCSV('./../beehive_data/temperature_schwartau.csv', 0, 'temperature', 500, 2)
+// importDataFromCSV('./../beehive_data/temperature_wurzburg.csv', 1, 'temperature', 500, 8)
+importDataFromCSV('./../beehive_data/weight_schwartau.csv', 0, 'weight', 10, 5)
+// importDataFromCSV('./../beehive_data/weight_wurzburg.csv', 1, 'weight', 500, 10)
   .then(() => {
     console.log('Data successfully imported to MongoDB Atlas')
     mongoose.disconnect()
