@@ -1265,7 +1265,7 @@
 	"variable": [
 		{
 			"key": "baseURL",
-			"value": "http://localhost:5030/api/v1"
+			"value": "https://cscloud8-68.lnu.se/api-assignment/api/v1"
 		},
 		{
 			"key": "JWTtoken",
