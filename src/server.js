@@ -23,8 +23,8 @@ try {
   expressApp.use(
     helmet.contentSecurityPolicy({
       directives: {
-        defaultSrc: ["'self'", 'http://cscloud7-221.lnu.se', 'https://cscloud7-221.lnu.se'],
-        scriptSrc: ["'self'", 'http://cscloud7-221.lnu.se', 'https://cscloud7-221.lnu.se']
+        defaultSrc: ["'self'", 'http://cscloud8-68.lnu.se', 'https://cscloud8-68.lnu.se'],
+        scriptSrc: ["'self'", 'http://cscloud8-68.lnu.se', 'https://cscloud8-68.lnu.se']
       }
     })
   )
