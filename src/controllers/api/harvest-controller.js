@@ -5,6 +5,7 @@
  * @version 1.0.0
  */
 
+import createError from 'http-errors'
 import { createLink } from './../../utils/linkUtils.js'
 import { BeehiveHarvest } from './../../models/beehiveHarvest.js'
 
@@ -89,8 +90,15 @@ export class HarvestController {
         ]
       })
     } catch (error) {
-      // Pass any errors to the error-handling middleware
-      next(error)
+      let err = error
+
+      if (error.name === 'ValidationError') {
+        // Validation error(s).
+        err = createError(400)
+        err.cause = error
+      }
+
+      next(err)
     }
   }
 }

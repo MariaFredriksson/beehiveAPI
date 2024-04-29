@@ -61,7 +61,7 @@ try {
       // Customized error messages for the different error statuses
       const errorMessages = {
         400: 'The request cannot or will not be processed due to something that is perceived to be a client error (for example, a validation error).',
-        401: 'Access token invalid or not provided.',
+        401: 'Unauthorized.',
         403: 'The request contained valid data and was understood by the server, but the server is refusing action due to the authenticated user not having the necessary permissions for the resource.',
         404: 'The requested resource was not found.',
         500: 'An unexpected condition was encountered.'

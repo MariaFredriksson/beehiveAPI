@@ -5,6 +5,7 @@
  * @version 1.0.0
  */
 
+import createError from 'http-errors'
 import { createLink } from './../../utils/linkUtils.js'
 import { Beehive } from './../../models/beehive.js'
 import { BeehiveFlow } from './../../models/beehiveFlow.js'
@@ -12,7 +13,6 @@ import { BeehiveHarvest } from './../../models/beehiveHarvest.js'
 import { BeehiveHumidity } from './../../models/beehiveHumidity.js'
 import { BeehiveTemperature } from './../../models/beehiveTemperature.js'
 import { BeehiveWeight } from './../../models/beehiveWeight.js'
-// import createError from 'http-errors'
 
 /**
  * Encapsulates a controller.
@@ -100,7 +100,15 @@ export class HivesController {
         ]
       })
     } catch (error) {
-      next(error)
+      let err = error
+
+      if (error.name === 'ValidationError') {
+        // Validation error(s).
+        err = createError(400)
+        err.cause = error
+      }
+
+      next(err)
     }
   }
 

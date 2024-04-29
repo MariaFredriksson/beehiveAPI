@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1850d916-2469-44f9-b6d7-342fa3801b7c",
+		"_postman_id": "d92086b1-54ae-4814-ab94-107f06ed6971",
 		"name": "API 1dv027",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25109232"
@@ -108,6 +108,64 @@
 			"response": []
 		},
 		{
+			"name": "registerUser error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check that the status code is 201\r",
+							"pm.test(\"Status code is 400\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"// Check that the response is in JSON format\r",
+							"pm.test(\"Response is in JSON format\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"fel\",\r\n    \"password\": \"password123\",\r\n    \"firstName\": \"ma\",\r\n    \"lastName\": \"fre\",\r\n    \"role\": \"farmer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user/register",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "loginUser",
 			"event": [
 				{
@@ -169,6 +227,54 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "loginUser error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check that the status code is 201\r",
+							"pm.test(\"Status code is 401\", () => {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"// Check that the response is in JSON format\r",
+							"pm.test(\"Response is in JSON format\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"fel\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -668,6 +774,72 @@
 			"response": []
 		},
 		{
+			"name": "addHive error",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"// Check that the response is in JSON format\r",
+							"pm.test(\"Response is in JSON format\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWTtoken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"hiveId\": \"fel\",\r\n    \"name\": \"{{newName}}\",\r\n    \"location\": \"{{newLocation}}\",\r\n    \"registeredById\": \"{{currentUserId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/hives",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"hives"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "updateHive",
 			"event": [
 				{
@@ -748,6 +920,73 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"{{updatedName}}\",\r\n    \"location\": \"{{updatedLocation}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/hives/{{addedHiveId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"hives",
+						"{{addedHiveId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateHive error",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"// Check that the response is in JSON format\r",
+							"pm.test(\"Response is in JSON format\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWTtoken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Missing location\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -907,6 +1146,62 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"hiveId\": \"{{addedHiveId}}\",\r\n    \"date\": \"2024-03-10\",\r\n    \"amount\": 42,\r\n    \"userId\": \"{{currentUserId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/harvest",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"harvest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addHarvest error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"// Check that the response is in JSON format\r",
+							"pm.test(\"Response is in JSON format\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWTtoken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"hiveId\": \"fel\",\r\n    \"date\": \"2024-03-10\",\r\n    \"amount\": 42,\r\n    \"userId\": \"{{currentUserId}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1202,7 +1497,8 @@
 							"});\r",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -1221,7 +1517,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"url\": \"https://webhook.site/82ad2bb5-d560-41ca-8459-1f35bcbfa93e\",\r\n    \"events\": [\"addedHiveRequest\"]\r\n}",
+					"raw": "{\r\n    \"url\": \"https://webhook.site/74fe0873-0802-4e74-aee6-75092a97511c\",\r\n    \"events\": [\"addedHiveRequest\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
