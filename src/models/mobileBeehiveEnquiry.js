@@ -1,5 +1,5 @@
 /**
- * Mongoose model for mobile beehive requests.
+ * Mongoose model for mobile beehive enquiry.
  *
  * @author Maria Fredriksson
  * @version 1.0.0
@@ -8,7 +8,7 @@
 import mongoose from 'mongoose'
 
 // Create a schema.
-const mobileBeehiveRequestSchema = new mongoose.Schema({
+const mobileBeehiveEnquirySchema = new mongoose.Schema({
   location: {
     type: String,
     required: true
@@ -44,4 +44,4 @@ const mobileBeehiveRequestSchema = new mongoose.Schema({
 })
 
 // Create a model using the schema.
-export const MobileBeehiveRequest = mongoose.model('MobileBeehiveRequest', mobileBeehiveRequestSchema)
+export const MobileBeehiveEnquiry = mongoose.model('MobileBeehiveEnquiry', mobileBeehiveEnquirySchema)

@@ -12,8 +12,8 @@ export const router = express.Router()
 
 const controller = new MobileBeehiveController()
 
-// GET mobile beehive requests
-router.get('/', (req, res, next) => controller.getAllMobileBeehiveRequests(req, res, next))
+// GET mobile beehive enquiries
+router.get('/', (req, res, next) => controller.getAllMobileBeehiveEnquiries(req, res, next))
 
-// POST mobile beehive request
-router.post('/', (req, res, next) => controller.addMobileBeehiveRequest(req, res, next))
+// POST mobile beehive enquiry
+router.post('/', (req, res, next) => controller.addMobileBeehiveEnquiry(req, res, next))

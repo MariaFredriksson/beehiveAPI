@@ -1307,7 +1307,7 @@
 			"response": []
 		},
 		{
-			"name": "getMobileBeehiveRequest",
+			"name": "mobileBeehiveEnquiry",
 			"event": [
 				{
 					"listen": "test",
@@ -1346,13 +1346,14 @@
 							"    const jsonData = pm.response.json();\r",
 							"    const link = jsonData.links[0];\r",
 							"    pm.expect(link).to.have.all.keys('href', 'rel', 'method');\r",
-							"    pm.expect(link.href).to.eql(\"/mobile-beehive-request\");\r",
-							"    pm.expect(link.rel).to.eql(\"add-mobile-beehive-request\");\r",
+							"    pm.expect(link.href).to.eql(\"/mobile-beehive-enquiry\");\r",
+							"    pm.expect(link.rel).to.eql(\"mobile-beehive-enquiry\");\r",
 							"    pm.expect(link.method).to.eql(\"POST\");\r",
 							"});\r",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -1370,19 +1371,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/mobile-beehive-request",
+					"raw": "{{baseURL}}/mobile-beehive-enquiry",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"mobile-beehive-request"
+						"mobile-beehive-enquiry"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "addMobileBeehiveRequest",
+			"name": "mobileBeehiveEnquiry",
 			"event": [
 				{
 					"listen": "test",
@@ -1428,13 +1429,14 @@
 							"    const jsonData = pm.response.json();\r",
 							"    const link = jsonData.links[0];\r",
 							"    pm.expect(link).to.have.all.keys('href', 'rel', 'method');\r",
-							"    pm.expect(link.href).to.eql(\"/mobile-beehive-request\");\r",
-							"    pm.expect(link.rel).to.eql(\"get-all-mobile-beehive-requests\");\r",
+							"    pm.expect(link.href).to.eql(\"/mobile-beehive-enquiry\");\r",
+							"    pm.expect(link.rel).to.eql(\"mobile-beehive-enquiry\");\r",
 							"    pm.expect(link.method).to.eql(\"GET\");\r",
 							"});\r",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -1453,7 +1455,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"location\": \"Here\",\r\n    \"startDate\": \"2024-03-28\",\r\n    \"endDate\": \"2024-03-29\",\r\n    \"requestedById\": \"{{currentUserId}}\"\r\n}",
+					"raw": "{\r\n    \"location\": \"Here\",\r\n    \"startDate\": \"2024-04-29\",\r\n    \"endDate\": \"2024-04-30\",\r\n    \"requestedById\": \"{{currentUserId}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1461,12 +1463,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/mobile-beehive-request",
+					"raw": "{{baseURL}}/mobile-beehive-enquiry",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"mobile-beehive-request"
+						"mobile-beehive-enquiry"
 					]
 				}
 			},

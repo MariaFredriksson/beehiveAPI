@@ -92,8 +92,8 @@ router.get('/', (req, res) => {
       createLink('/hives', 'add-hive', 'POST'),
       createLink('/harvest', 'get-all-harvests', 'GET'),
       createLink('/harvest', 'add-harvest', 'POST'),
-      createLink('/mobile-beehive-request', 'get-all-mobile-beehive-requests', 'GET'),
-      createLink('/mobile-beehive-request', 'add-mobile-beehive-request', 'POST'),
+      createLink('/mobile-beehive-enquiry', 'mobile-beehive-enquiry', 'GET'),
+      createLink('/mobile-beehive-enquiry', 'mobile-beehive-enquiry', 'POST'),
       createLink('/webhook/register', 'register-webhook', 'POST')
     ]
   })
@@ -105,5 +105,5 @@ router.use('/user', userRouter)
 // Apply authenticateJWT middleware before accessing the specific routes
 router.use('/hives', authenticateJWT, hivesRouter)
 router.use('/harvest', authenticateJWT, isFarmer, harvestRouter)
-router.use('/mobile-beehive-request', authenticateJWT, isFarmer, mobileBeehiveRouter)
+router.use('/mobile-beehive-enquiry', authenticateJWT, isFarmer, mobileBeehiveRouter)
 router.use('/webhook', authenticateJWT, webhookRouter)
